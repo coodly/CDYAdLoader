@@ -19,6 +19,10 @@
 		EA6E825518E8A2E5009AC2E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6E823D18E8A2E5009AC2E9 /* UIKit.framework */; };
 		EA6E825D18E8A2E5009AC2E9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA6E825B18E8A2E5009AC2E9 /* InfoPlist.strings */; };
 		EA6E825F18E8A2E5009AC2E9 /* AdLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E825E18E8A2E5009AC2E9 /* AdLoaderTests.m */; };
+		EA6E826B18E8A514009AC2E9 /* CDYAdLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E826A18E8A514009AC2E9 /* CDYAdLoader.m */; };
+		EA6E827218E92E73009AC2E9 /* CDYAdMobLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E827118E92E73009AC2E9 /* CDYAdMobLoader.m */; };
+		EA6E827518E92E86009AC2E9 /* CDYIAdLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E827418E92E86009AC2E9 /* CDYIAdLoader.m */; };
+		EA6E827718E92EBB009AC2E9 /* CDYAdLoader.podspec in Resources */ = {isa = PBXBuildFile; fileRef = EA6E827618E92EBB009AC2E9 /* CDYAdLoader.podspec */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,14 @@
 		EA6E825A18E8A2E5009AC2E9 /* AdLoaderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AdLoaderTests-Info.plist"; sourceTree = "<group>"; };
 		EA6E825C18E8A2E5009AC2E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EA6E825E18E8A2E5009AC2E9 /* AdLoaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdLoaderTests.m; sourceTree = "<group>"; };
+		EA6E826918E8A514009AC2E9 /* CDYAdLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDYAdLoader.h; sourceTree = "<group>"; };
+		EA6E826A18E8A514009AC2E9 /* CDYAdLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDYAdLoader.m; sourceTree = "<group>"; };
+		EA6E826C18E92E13009AC2E9 /* CDYAdService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDYAdService.h; sourceTree = "<group>"; };
+		EA6E827018E92E73009AC2E9 /* CDYAdMobLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDYAdMobLoader.h; sourceTree = "<group>"; };
+		EA6E827118E92E73009AC2E9 /* CDYAdMobLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDYAdMobLoader.m; sourceTree = "<group>"; };
+		EA6E827318E92E86009AC2E9 /* CDYIAdLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDYIAdLoader.h; sourceTree = "<group>"; };
+		EA6E827418E92E86009AC2E9 /* CDYIAdLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDYIAdLoader.m; sourceTree = "<group>"; };
+		EA6E827618E92EBB009AC2E9 /* CDYAdLoader.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CDYAdLoader.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +89,9 @@
 		EA6E822D18E8A2E5009AC2E9 = {
 			isa = PBXGroup;
 			children = (
+				EA6E827618E92EBB009AC2E9 /* CDYAdLoader.podspec */,
+				EA6E826818E8A502009AC2E9 /* Core */,
+				EA6E826D18E92E31009AC2E9 /* Services */,
 				EA6E823F18E8A2E5009AC2E9 /* AdLoader */,
 				EA6E825818E8A2E5009AC2E9 /* AdLoaderTests */,
 				EA6E823818E8A2E5009AC2E9 /* Frameworks */,
@@ -142,6 +157,43 @@
 				EA6E825B18E8A2E5009AC2E9 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EA6E826818E8A502009AC2E9 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				EA6E826918E8A514009AC2E9 /* CDYAdLoader.h */,
+				EA6E826A18E8A514009AC2E9 /* CDYAdLoader.m */,
+				EA6E826C18E92E13009AC2E9 /* CDYAdService.h */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		EA6E826D18E92E31009AC2E9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				EA6E826E18E92E56009AC2E9 /* AdMob */,
+				EA6E826F18E92E56009AC2E9 /* iAd */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		EA6E826E18E92E56009AC2E9 /* AdMob */ = {
+			isa = PBXGroup;
+			children = (
+				EA6E827018E92E73009AC2E9 /* CDYAdMobLoader.h */,
+				EA6E827118E92E73009AC2E9 /* CDYAdMobLoader.m */,
+			);
+			path = AdMob;
+			sourceTree = "<group>";
+		};
+		EA6E826F18E92E56009AC2E9 /* iAd */ = {
+			isa = PBXGroup;
+			children = (
+				EA6E827318E92E86009AC2E9 /* CDYIAdLoader.h */,
+				EA6E827418E92E86009AC2E9 /* CDYIAdLoader.m */,
+			);
+			path = iAd;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,6 +274,7 @@
 			files = (
 				EA6E824418E8A2E5009AC2E9 /* InfoPlist.strings in Resources */,
 				EA6E824C18E8A2E5009AC2E9 /* Images.xcassets in Resources */,
+				EA6E827718E92EBB009AC2E9 /* CDYAdLoader.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +294,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA6E824618E8A2E5009AC2E9 /* main.m in Sources */,
+				EA6E827218E92E73009AC2E9 /* CDYAdMobLoader.m in Sources */,
+				EA6E826B18E8A514009AC2E9 /* CDYAdLoader.m in Sources */,
+				EA6E827518E92E86009AC2E9 /* CDYIAdLoader.m in Sources */,
 				EA6E824A18E8A2E5009AC2E9 /* CDYAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,6 +494,7 @@
 				EA6E826418E8A2E5009AC2E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EA6E826518E8A2E5009AC2E9 /* Build configuration list for PBXNativeTarget "AdLoaderTests" */ = {
 			isa = XCConfigurationList;
@@ -446,6 +503,7 @@
 				EA6E826718E8A2E5009AC2E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
