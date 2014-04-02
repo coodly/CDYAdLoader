@@ -15,7 +15,196 @@
  */
 
 #import "CDYAdLoader.h"
+#import "CDYAdService.h"
+#import "CDYAdLoaderConstants.h"
+#import "CDYAdLoadDelegate.h"
+
+NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
+
+@interface CDYAdLoader () <CDYAdLoadDelegate>
+
+@property (nonatomic, strong) NSMutableArray *services;
+@property (nonatomic, strong) id <CDYAdService> presentedService;
+@property (nonatomic, strong) UIView *presentedBanner;
+
+@end
 
 @implementation CDYAdLoader
+
++ (CDYAdLoader *)sharedInstance {
+    static dispatch_once_t pred = 0;
+    __strong static id _sharedObject = nil;
+    dispatch_once(&pred, ^{
+        _sharedObject = [[CDYAdLoader alloc] initSingleton];
+    });
+    return _sharedObject;
+
+}
+
+- (id)initSingleton {
+    self = [super init];
+    if (self) {
+        _services = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+- (id)init {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must use [%@ %@] instead",
+                                                                     NSStringFromClass([self class]),
+                                                                     NSStringFromSelector(@selector(sharedInstance))]
+                                 userInfo:nil];
+    return nil;
+}
+
+- (void)addService:(id <CDYAdService>)adService {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.services addObject:adService];
+    });
+}
+
+- (void)reloadAds {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CDYALLog(@"reloadAds");
+        [self hideBanner:NO completion:^{
+            [self loadBannerUsingService:[self.services firstObject]];
+        }];
+    });
+}
+
+- (void)setAdCheckTime:(NSTimeInterval)adCheckTime {
+    _adCheckTime = adCheckTime;
+
+    CDYAdLoaderDelayedExecution(adCheckTime, ^{
+        [self checkAdShown];
+    });
+}
+
+- (void)checkAdShown {
+    CDYALLog(@"checkAdShown");
+    if (![self isBannerVisible]) {
+        CDYALLog(@"Banner not visible");
+        [self reloadAds];
+    }
+
+    CDYAdLoaderDelayedExecution(self.adCheckTime, ^{
+        [self checkAdShown];
+    });
+}
+
+- (void)hideBanner:(BOOL)animated completion:(CDYAdLoaderBlock)completion {
+    CDYALLog(@"hideBanner");
+
+    void (^hideAnimationBlock)() = ^{
+        CGRect bannerFrame = self.presentedBanner.frame;
+        bannerFrame.origin.y = -CGRectGetHeight(bannerFrame);
+        [self.presentedBanner setFrame:bannerFrame];
+
+        CGRect contentFrame = self.contentView.frame;
+        contentFrame.origin.y -= CGRectGetHeight(bannerFrame);
+        contentFrame.size.height += CGRectGetHeight(bannerFrame);
+        [self.contentView setFrame:contentFrame];
+    };
+
+    void (^hideCompletionBlock)(BOOL finished) = ^(BOOL finished) {
+        [self.presentedBanner removeFromSuperview];
+        [self setPresentedBanner:nil];
+        completion();
+    };
+
+    if (!animated) {
+        [UIView performWithoutAnimation:hideAnimationBlock];
+        hideCompletionBlock(YES);
+        return;
+    }
+
+    [UIView animateWithDuration:CDYAdLoaderAnimationTime delay:0 options:0 animations:hideAnimationBlock completion:hideCompletionBlock];
+}
+
+- (void)showBanner:(BOOL)animated {
+    CDYALLog(@"showBanner:%d", animated);
+    if ([self isBannerVisible]) {
+        CDYALLog(@"Banner already visible");
+        return;
+    }
+
+    [self.mainView addSubview:self.presentedBanner];
+    [self.presentedBanner setFrame:CGRectOffset(self.presentedBanner.bounds,
+            (CGRectGetWidth(self.mainView.bounds) - CGRectGetWidth(self.presentedBanner.frame)) / 2,
+            -CGRectGetHeight(self.presentedBanner.frame))];
+    [self.presentedBanner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin];
+
+    void (^animationBlock)() = ^{
+        CGRect bannerFrame = self.presentedBanner.frame;
+        bannerFrame.origin.y = 0;
+        [self.presentedBanner setFrame:bannerFrame];
+
+        CGRect contentFrame = self.contentView.frame;
+        contentFrame.origin.y += CGRectGetHeight(bannerFrame);
+        contentFrame.size.height -= CGRectGetHeight(bannerFrame);
+        [self.contentView setFrame:contentFrame];
+    };
+
+    if (!animated) {
+        [UIView performWithoutAnimation:animationBlock];
+        return;
+    }
+
+    [UIView animateWithDuration:CDYAdLoaderAnimationTime delay:0 options:0 animations:animationBlock completion:^(BOOL finished) {
+
+    }];
+}
+
+- (void)loadBannerUsingService:(id <CDYAdService>)service {
+    CDYALLog(@"loadBannerUsingService:%@", service);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.presentedService setDelegate:nil];
+        [self setPresentedService:service];
+        [service setDelegate:self];
+        [service loadBanner];
+    });
+}
+
+- (void)service:(id <CDYAdService>)service didLoadAdInBanner:(UIView *)banner {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CDYALLog(@"didLoadAdInBanner");
+        [self setPresentedBanner:banner];
+        [self showBanner:YES];
+    });
+}
+
+- (void)service:(id <CDYAdService>)service loadAdError:(NSError *)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CDYALLog(@"loadAdError:%@", error);
+        [self hideBanner:YES completion:^{
+            [self loadBannerUsingService:[self nextService]];
+        }];
+    });
+}
+
+- (id <CDYAdService>)nextService {
+    if (!self.presentedService) {
+        return [self.services firstObject];
+    }
+
+    NSUInteger presentedIndex = [self.services indexOfObject:self.presentedService];
+    NSUInteger nextIndex = presentedIndex + 1;
+
+    if (nextIndex >= self.services.count) {
+        return nil;
+    }
+
+    return self.services[nextIndex];
+}
+
+- (BOOL)isBannerVisible {
+    if (!self.presentedBanner || !self.presentedBanner.superview) {
+        return NO;
+    }
+
+    CGRect intersection = CGRectIntersection(self.mainView.bounds, self.presentedBanner.frame);
+    return CGRectGetHeight(intersection) == CGRectGetHeight(self.presentedBanner.frame);
+}
 
 @end

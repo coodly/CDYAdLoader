@@ -15,7 +15,10 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "CDYAdService.h"
 
-@interface CDYIAdLoader : NSObject
+@interface CDYIAdLoader : NSObject <CDYAdService>
+
+@property (nonatomic, assign) id<CDYAdLoadDelegate> delegate;
 
 @end

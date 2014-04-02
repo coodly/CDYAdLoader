@@ -16,6 +16,13 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol CDYAdLoadDelegate;
+
+typedef void (^CDYAdBannerLoadBlock)(UIView *loadedBanner, NSError *error);
+
 @protocol CDYAdService <NSObject>
+
+- (void)setDelegate:(id<CDYAdLoadDelegate>)delegate;
+- (void)loadBanner;
 
 @end

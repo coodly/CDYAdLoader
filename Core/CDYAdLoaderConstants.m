@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import "CDYAdService.h"
+#import "CDYAdLoaderConstants.h"
 
-@protocol CDYAdLoadDelegate;
-
-@interface CDYAdMobLoader : NSObject <CDYAdService>
-
-@property (nonatomic, assign) id<CDYAdLoadDelegate> delegate;
-
-- (id)initWithAdMobUnit:(NSString *)adMobUnit;
-
-@end
+void CDYAdLoaderDelayedExecution(NSTimeInterval seconds, CDYAdLoaderBlock action) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, seconds * NSEC_PER_SEC), dispatch_get_main_queue(), action);
+}

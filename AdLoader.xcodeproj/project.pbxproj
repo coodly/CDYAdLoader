@@ -23,6 +23,7 @@
 		EA6E827218E92E73009AC2E9 /* CDYAdMobLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E827118E92E73009AC2E9 /* CDYAdMobLoader.m */; };
 		EA6E827518E92E86009AC2E9 /* CDYIAdLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E827418E92E86009AC2E9 /* CDYIAdLoader.m */; };
 		EA6E827718E92EBB009AC2E9 /* CDYAdLoader.podspec in Resources */ = {isa = PBXBuildFile; fileRef = EA6E827618E92EBB009AC2E9 /* CDYAdLoader.podspec */; };
+		EA6E827A18E93632009AC2E9 /* CDYAdLoaderConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E827918E93632009AC2E9 /* CDYAdLoaderConstants.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,9 @@
 		EA6E827318E92E86009AC2E9 /* CDYIAdLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDYIAdLoader.h; sourceTree = "<group>"; };
 		EA6E827418E92E86009AC2E9 /* CDYIAdLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDYIAdLoader.m; sourceTree = "<group>"; };
 		EA6E827618E92EBB009AC2E9 /* CDYAdLoader.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CDYAdLoader.podspec; sourceTree = "<group>"; };
+		EA6E827818E93632009AC2E9 /* CDYAdLoaderConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDYAdLoaderConstants.h; sourceTree = "<group>"; };
+		EA6E827918E93632009AC2E9 /* CDYAdLoaderConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDYAdLoaderConstants.m; sourceTree = "<group>"; };
+		EA94746718EA808C0012E0B7 /* CDYAdLoadDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDYAdLoadDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +166,11 @@
 		EA6E826818E8A502009AC2E9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				EA94746718EA808C0012E0B7 /* CDYAdLoadDelegate.h */,
 				EA6E826918E8A514009AC2E9 /* CDYAdLoader.h */,
 				EA6E826A18E8A514009AC2E9 /* CDYAdLoader.m */,
+				EA6E827818E93632009AC2E9 /* CDYAdLoaderConstants.h */,
+				EA6E827918E93632009AC2E9 /* CDYAdLoaderConstants.m */,
 				EA6E826C18E92E13009AC2E9 /* CDYAdService.h */,
 			);
 			path = Core;
@@ -295,6 +302,7 @@
 			files = (
 				EA6E824618E8A2E5009AC2E9 /* main.m in Sources */,
 				EA6E827218E92E73009AC2E9 /* CDYAdMobLoader.m in Sources */,
+				EA6E827A18E93632009AC2E9 /* CDYAdLoaderConstants.m in Sources */,
 				EA6E826B18E8A514009AC2E9 /* CDYAdLoader.m in Sources */,
 				EA6E827518E92E86009AC2E9 /* CDYIAdLoader.m in Sources */,
 				EA6E824A18E8A2E5009AC2E9 /* CDYAppDelegate.m in Sources */,

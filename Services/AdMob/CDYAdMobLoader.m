@@ -15,7 +15,27 @@
  */
 
 #import "CDYAdMobLoader.h"
+#import "CDYAdLoadDelegate.h"
+
+@interface CDYAdMobLoader ()
+
+@property (nonatomic, copy) NSString *adMobUnit;
+
+@end
 
 @implementation CDYAdMobLoader
+
+- (id)initWithAdMobUnit:(NSString *)adMobUnit {
+    self = [super init];
+    if (self) {
+        _adMobUnit = adMobUnit;
+    }
+    return self;
+}
+
+- (void)loadBanner {
+
+}
+
 
 @end

@@ -14,8 +14,44 @@
  * limitations under the License.
  */
 
+#import <iAd/iAd.h>
 #import "CDYIAdLoader.h"
+#import "CDYAdLoaderConstants.h"
+#import "CDYAdLoadDelegate.h"
+
+@interface CDYIAdLoader () <ADBannerViewDelegate>
+
+@property (nonatomic, strong) ADBannerView *presentedBanner;
+
+@end
 
 @implementation CDYIAdLoader
+
+- (void)loadBanner {
+    CDYALLog(@"loadBanner");
+    [self.presentedBanner setDelegate:nil];
+    [self.presentedBanner removeFromSuperview];
+
+    ADBannerView *banner = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    [self setPresentedBanner:banner];
+    [banner setDelegate:self];
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner {
+    CDYALLog(@"iAd:bannerViewDidLoadAd");
+    [self.delegate service:self didLoadAdInBanner:banner];
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error {
+    CDYALLog(@"iAd:didFailToReceiveAdWithError:%@", error);
+    [self.delegate service:self loadAdError:error];
+
+    [self.presentedBanner setDelegate:nil];
+    [self setPresentedBanner:nil];
+}
+
+- (void)bannerViewWillLoadAd:(ADBannerView *)banner {
+    CDYALLog(@"iAd:bannerViewWillLoadAd:");
+}
 
 @end

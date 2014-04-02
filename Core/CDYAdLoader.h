@@ -16,6 +16,17 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol CDYAdService;
+
 @interface CDYAdLoader : NSObject
+
+@property (nonatomic, assign) NSTimeInterval adCheckTime;
+@property (nonatomic, strong) UIView *mainView;
+@property (nonatomic, strong) UIView *contentView;
+
++ (CDYAdLoader *)sharedInstance;
+
+- (void)addService:(id<CDYAdService>)adService;
+- (void)reloadAds;
 
 @end

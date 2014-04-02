@@ -15,14 +15,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "CDYAdService.h"
 
-@protocol CDYAdLoadDelegate;
+typedef void (^CDYAdLoaderBlock)();
 
-@interface CDYAdMobLoader : NSObject <CDYAdService>
+void CDYAdLoaderDelayedExecution(NSTimeInterval seconds, CDYAdLoaderBlock action);
 
-@property (nonatomic, assign) id<CDYAdLoadDelegate> delegate;
-
-- (id)initWithAdMobUnit:(NSString *)adMobUnit;
-
-@end
+#define CDYALLog(s, ...) NSLog( @"<%@:%@ (%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], NSStringFromSelector(_cmd), __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )

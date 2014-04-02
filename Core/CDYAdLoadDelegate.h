@@ -15,14 +15,12 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "CDYAdService.h"
 
-@protocol CDYAdLoadDelegate;
+@protocol CDYAdService;
 
-@interface CDYAdMobLoader : NSObject <CDYAdService>
+@protocol CDYAdLoadDelegate <NSObject>
 
-@property (nonatomic, assign) id<CDYAdLoadDelegate> delegate;
-
-- (id)initWithAdMobUnit:(NSString *)adMobUnit;
+- (void)service:(id<CDYAdService>)service didLoadAdInBanner:(UIView *)banner;
+- (void)service:(id<CDYAdService>)service loadAdError:(NSError *)error;
 
 @end
