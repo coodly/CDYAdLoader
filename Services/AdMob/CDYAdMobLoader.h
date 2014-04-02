@@ -22,6 +22,9 @@
 @interface CDYAdMobLoader : NSObject <CDYAdService>
 
 @property (nonatomic, assign) id<CDYAdLoadDelegate> delegate;
+@property (nonatomic, strong) NSArray *testDevices;
+@property (nonatomic, assign) BOOL testing;
+@property (nonatomic, weak) UIViewController *rootViewController;
 
 - (id)initWithAdMobUnit:(NSString *)adMobUnit;
 

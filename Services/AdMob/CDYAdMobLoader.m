@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+#import <Google-AdMob-Ads-SDK/GADBannerView.h>
 #import "CDYAdMobLoader.h"
 #import "CDYAdLoadDelegate.h"
+#import "CDYAdLoaderConstants.h"
 
-@interface CDYAdMobLoader ()
+@interface CDYAdMobLoader () <GADBannerViewDelegate>
 
 @property (nonatomic, copy) NSString *adMobUnit;
+@property (nonatomic, strong) GADBannerView *bannerView;
 
 @end
 
@@ -29,13 +32,49 @@
     self = [super init];
     if (self) {
         _adMobUnit = adMobUnit;
+        _testDevices = @[];
     }
     return self;
 }
 
 - (void)loadBanner {
+    CDYALLog(@"adMob:loadBanner");
+    GADBannerView *bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
+    [self setBannerView:bannerView];
+    [bannerView setAdUnitID:self.adMobUnit];
+    [bannerView setRootViewController:self.rootViewController];
+    [bannerView setDelegate:self];
+    GADRequest *request = [GADRequest request];
+    [request setTesting:self.testing];
+    [request setTestDevices:self.testDevices];
+    [bannerView loadRequest:request];
 
 }
 
+- (void)adViewDidReceiveAd:(GADBannerView *)view {
+    CDYALLog(@"adMob:adViewDidReceiveAd");
+    [self.delegate service:self didLoadAdInBanner:view];
+}
+
+- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
+    CDYALLog(@"adMob:didFailToReceiveAdWithError:%@", error);
+    [self.delegate service:self loadAdError:error];
+}
+
+- (void)adViewWillPresentScreen:(GADBannerView *)adView {
+    CDYALLog(@"adMob:adViewWillPresentScreen");
+}
+
+- (void)adViewWillDismissScreen:(GADBannerView *)adView {
+    CDYALLog(@"adMob:adViewWillDismissScreen");
+}
+
+- (void)adViewDidDismissScreen:(GADBannerView *)adView {
+    CDYALLog(@"adMob:adViewDidDismissScreen");
+}
+
+- (void)adViewWillLeaveApplication:(GADBannerView *)adView {
+    CDYALLog(@"adMob:adViewWillLeaveApplication");
+}
 
 @end
