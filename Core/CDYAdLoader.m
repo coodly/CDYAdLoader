@@ -226,7 +226,7 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
     if (self.bannerAdPosition == AdPositionTop) {
         bannerFrame.origin.y = 0;
     } else {
-        bannerFrame.origin.y = CGRectGetHeight(self.mainView.frame) - CGRectGetHeight(bannerFrame);
+        bannerFrame.origin.y = CGRectGetHeight(self.mainView.bounds) - CGRectGetHeight(bannerFrame);
     }
 
     return bannerFrame;
