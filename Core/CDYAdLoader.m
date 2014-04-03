@@ -45,6 +45,7 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
     self = [super init];
     if (self) {
         _services = [[NSMutableArray alloc] init];
+        _bannerAdPosition = AdPositionTop;
     }
     return self;
 }
@@ -97,12 +98,13 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
     CDYALLog(@"hideBanner");
 
     void (^hideAnimationBlock)() = ^{
-        CGRect bannerFrame = self.presentedBanner.frame;
-        bannerFrame.origin.y = -CGRectGetHeight(bannerFrame);
+        CGRect bannerFrame = [self bannerHiddenFrame];
         [self.presentedBanner setFrame:bannerFrame];
 
         CGRect contentFrame = self.contentView.frame;
-        contentFrame.origin.y -= CGRectGetHeight(bannerFrame);
+        if (self.bannerAdPosition == AdPositionTop) {
+            contentFrame.origin.y -= CGRectGetHeight(bannerFrame);
+        }
         contentFrame.size.height += CGRectGetHeight(bannerFrame);
         [self.contentView setFrame:contentFrame];
     };
@@ -130,18 +132,23 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
     }
 
     [self.mainView addSubview:self.presentedBanner];
-    [self.presentedBanner setFrame:CGRectOffset(self.presentedBanner.bounds,
-            (CGRectGetWidth(self.mainView.bounds) - CGRectGetWidth(self.presentedBanner.frame)) / 2,
-            -CGRectGetHeight(self.presentedBanner.frame))];
-    [self.presentedBanner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin];
+    [self.presentedBanner setFrame:[self bannerHiddenFrame]];
+    UIViewAutoresizing autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    if (self.bannerAdPosition == AdPositionTop) {
+        autoresizingMask |= UIViewAutoresizingFlexibleBottomMargin;
+    } else {
+        autoresizingMask |= UIViewAutoresizingFlexibleTopMargin;
+    }
+    [self.presentedBanner setAutoresizingMask:autoresizingMask];
 
     void (^animationBlock)() = ^{
-        CGRect bannerFrame = self.presentedBanner.frame;
-        bannerFrame.origin.y = 0;
+        CGRect bannerFrame = [self bannerVisibleFrame];
         [self.presentedBanner setFrame:bannerFrame];
 
         CGRect contentFrame = self.contentView.frame;
-        contentFrame.origin.y += CGRectGetHeight(bannerFrame);
+        if (self.bannerAdPosition == AdPositionTop) {
+            contentFrame.origin.y += CGRectGetHeight(bannerFrame);
+        }
         contentFrame.size.height -= CGRectGetHeight(bannerFrame);
         [self.contentView setFrame:contentFrame];
     };
@@ -205,6 +212,24 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
 
     CGRect intersection = CGRectIntersection(self.mainView.bounds, self.presentedBanner.frame);
     return CGRectGetHeight(intersection) == CGRectGetHeight(self.presentedBanner.frame);
+}
+
+- (CGRect)bannerHiddenFrame {
+    CGFloat yOffset = (self.bannerAdPosition == AdPositionTop ? -CGRectGetHeight(self.presentedBanner.frame) : CGRectGetHeight(self.mainView.frame));
+    return CGRectOffset(self.presentedBanner.bounds,
+            (CGRectGetWidth(self.mainView.bounds) - CGRectGetWidth(self.presentedBanner.frame)) / 2,
+            yOffset);
+}
+
+- (CGRect)bannerVisibleFrame {
+    CGRect bannerFrame = self.presentedBanner.frame;
+    if (self.bannerAdPosition == AdPositionTop) {
+        bannerFrame.origin.y = 0;
+    } else {
+        bannerFrame.origin.y = CGRectGetHeight(self.mainView.frame) - CGRectGetHeight(bannerFrame);
+    }
+
+    return bannerFrame;
 }
 
 @end

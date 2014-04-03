@@ -21,3 +21,8 @@ typedef void (^CDYAdLoaderBlock)();
 void CDYAdLoaderDelayedExecution(NSTimeInterval seconds, CDYAdLoaderBlock action);
 
 #define CDYALLog(s, ...) NSLog( @"<%@:%@ (%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], NSStringFromSelector(_cmd), __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+
+typedef NS_ENUM(short, CDYBannerAdPosition) {
+    AdPositionTop,
+    AdPositionBottom
+};

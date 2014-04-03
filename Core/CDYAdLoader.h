@@ -15,6 +15,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "CDYAdLoaderConstants.h"
 
 @protocol CDYAdService;
 
@@ -23,6 +24,7 @@
 @property (nonatomic, assign) NSTimeInterval adCheckTime;
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, assign) CDYBannerAdPosition bannerAdPosition;
 
 + (CDYAdLoader *)sharedInstance;
 
