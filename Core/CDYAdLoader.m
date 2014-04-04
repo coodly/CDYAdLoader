@@ -16,7 +16,6 @@
 
 #import "CDYAdLoader.h"
 #import "CDYAdService.h"
-#import "CDYAdLoaderConstants.h"
 #import "CDYAdLoadDelegate.h"
 
 NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
@@ -82,10 +81,24 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
     });
 }
 
+- (void)setLoadingAdsDisabled:(BOOL)loadingAdsDisabled {
+    _loadingAdsDisabled = loadingAdsDisabled;
+
+    if (!loadingAdsDisabled) {
+        return;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideBanner:YES completion:^{
+            CDYALLog(@"hidden");
+        }];
+    });
+}
+
 - (void)checkAdShown {
     CDYALLog(@"checkAdShown");
-    if (![self isBannerVisible]) {
-        CDYALLog(@"Banner not visible");
+    if (![self isBannerVisible] && !self.loadingAdsDisabled) {
+        CDYALLog(@"Banner not visible. Reload");
         [self reloadAds];
     }
 
@@ -96,6 +109,12 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
 
 - (void)hideBanner:(BOOL)animated completion:(CDYAdLoaderBlock)completion {
     CDYALLog(@"hideBanner");
+
+    if (![self isBannerVisible]) {
+        CDYALLog(@"Banner not visible. Nothing to hide");
+        completion();
+        return;
+    }
 
     void (^hideAnimationBlock)() = ^{
         CGRect bannerFrame = [self bannerHiddenFrame];
@@ -167,6 +186,13 @@ NSTimeInterval const CDYAdLoaderAnimationTime = 0.3;
     CDYALLog(@"loadBannerUsingService:%@", service);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.presentedService setDelegate:nil];
+        [self setPresentedService:nil];
+
+        if (self.loadingAdsDisabled) {
+            CDYALLog(@"Ads should not be shown");
+            return;
+        }
+
         [self setPresentedService:service];
         [service setDelegate:self];
         [service loadBanner];

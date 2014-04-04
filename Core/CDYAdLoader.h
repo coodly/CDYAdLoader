@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, assign) CDYBannerAdPosition bannerAdPosition;
+@property (nonatomic, assign) BOOL loadingAdsDisabled;
 
 + (CDYAdLoader *)sharedInstance;
 
