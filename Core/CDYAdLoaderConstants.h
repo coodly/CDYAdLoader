@@ -20,7 +20,20 @@ typedef void (^CDYAdLoaderBlock)();
 
 void CDYAdLoaderDelayedExecution(NSTimeInterval seconds, CDYAdLoaderBlock action);
 
-#define CDYALLog(s, ...) NSLog( @"<%@:%@ (%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], NSStringFromSelector(_cmd), __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+
+#ifndef CDY_ENABLE_AD_LOADER_LOGGING
+    #ifdef DEBUG
+        #define CDY_ENABLE_AD_LOADER_LOGGING 1
+    #else
+        #define CDY_ENABLE_AD_LOADER_LOGGING 0
+    #endif
+#endif
+
+#if CDY_ENABLE_AD_LOADER_LOGGING
+    #define CDYALLog(s, ...) NSLog( @"<%@:%@ (%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], NSStringFromSelector(_cmd), __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+    #define CDYALLog(s, ...) //
+#endif
 
 typedef NS_ENUM(short, CDYBannerAdPosition) {
     AdPositionTop,
